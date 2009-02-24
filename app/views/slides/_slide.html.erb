@@ -1,0 +1,21 @@
+<% div_for slide, :class => "title-placement-#{slide.title_placement}" do %>
+  <div class="preview">
+    <% if slide.link %><a href="<%= slide.link %>"><% end %>
+    <%= image_tag slide.picture_url %>
+    <% if slide.link %></a><% end %>
+  </div>
+  <div class="title-box">
+    <div class="title-box-inner">
+      <div class="title">
+        <% if slide.link %><a href="<%= slide.link %>"><% end %>
+        <%=h slide.title %>
+        <% if slide.link %></a><% end %>
+      </div>
+      <div class="subtitle">
+        <% if slide.link %><a href="<%= slide.link %>"><% end %>
+        <%=h slide.subtitle %>
+        <% if slide.link %></a><% end %>
+      </div>
+    </div>
+  </div>
+<% end %>

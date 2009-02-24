@@ -1,0 +1,40 @@
+<% 
+all_slides = @page_object.slides + (@page_object.added_slides || [])
+all_slides = [Slide.new] if all_slides.size == 0 
+%>
+
+<% fields_for_page_object do |f| -%>
+<div class="box">
+  <div class="screen">
+    <div class="stage">
+      <div class="slides">
+        <% all_slides.each do |slide| %>
+          <%= render :partial => 'slides/embedded_fields', :locals => {:f => f, :slide => slide } unless slide.destroy_association? %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <div class="settings">
+    <%= f.label :delay, 'Show Each Slide for:' %> <%= f.text_field :delay, :size => 3, :maxlength => 3 %> <%= f.label :delay, 'seconds.' %>
+  </div>
+  
+  <div class="slide-controls" id="slide-controls-<%= @page_object.urn %>"><%# Sortable.create requires the div to have an ID :( %>
+    <% all_slides.each_with_index do |slide, index| %>
+      <%= render :partial => 'slides/control', :locals => {:index => index, :sortable => true, :showing => (index == 0) }%>
+    <% end %>
+    <a class="add-slide" title="Add Slide">Add Slide</a>
+  </div>
+  
+</div>
+  
+<div class="new-slide-code" style="display:none">
+  <%= render(:partial => 'slides/embedded_fields', :locals => {:f => f }) %>
+</div>
+<div class="new-slide-control-code" style="display:none">
+  <%= render :partial => 'slides/control', :locals => {:sortable => true} %>
+</div>
+<% end -%>
+
+<% stylesheets 'slideshow', 'slideshow-edit' %>
+<% javascripts 'prototype', 'effects', 'dragdrop', 'slides-edit' %>

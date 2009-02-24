@@ -1,0 +1,13 @@
+.app-slideshow .stage .slide .settings { position:absolute; bottom:0px; right:0px; text-align:center; font-size:70%; border-right:0px; -moz-border-radius-bottomright: 0px; -webkit-border-bottom-right-radius: 0px; -moz-border-radius-topright: 0px; -webkit-border-top-right-radius: 0px;}
+.app-slideshow .stage .slide .settings input { width:12em;}
+
+.app-slideshow .slides .slide .title-box input,
+.app-slideshow .slides .slide .title-box textarea { font-size:inherit; text-align:inherit; color:inherit; font-family:inherit;}
+
+
+.app-slideshow .slides .slide.title-placement-top .title textarea,
+.app-slideshow .slides .slide.title-placement-bottom .title textarea { height:1em;}
+.app-slideshow .slides .slide.title-placement-right .title textarea,
+.app-slideshow .slides .slide.title-placement-left .title textarea { height:4em; width: 100%; }
+
+.app-slideshow .slide-controls a.add-slide {background-image:url(/slideshow/images/add-slide-control.png); padding:6px 7px;}

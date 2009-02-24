@@ -1,0 +1,13 @@
+93a94
+> 		  this.options.hu = ''; // use full urls for images and thumbnails
+94a96,97
+> 			var htmlThumbs = this.slideshow.getElements(this.classes.get('thumbnails') + ' img');
+> 			var thumbIndex = 0;
+96c99
+< 				var src = img.get('src').split('/').getLast();
+---
+> 				var src = img.get('src'); // read full url
+99c102
+< 				data[src] = {'caption': caption, 'href': href};
+---
+> 				data[src] = {'caption': caption, 'href': href, 'thumbnail': htmlThumbs[thumbIndex++].get('src') };

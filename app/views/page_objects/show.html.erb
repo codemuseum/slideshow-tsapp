@@ -1,0 +1,16 @@
+<div class="box<%= ' empty-slideshow' if @page_object.slides.empty? %>">
+  <div class="screen">
+    <div class="stage">
+      <div class="slides delay-<%=h @page_object.delay %>">
+        <%= render :partial => @page_object.slides %>
+      </div>
+    </div>
+  </div>
+  <div class="slide-controls">
+    <% @page_object.slides.each_with_index do |slide, index| %>
+      <%= render :partial => 'slides/control', :locals => {:index => index, :showing => (index == 0) } %>
+    <% end %>
+  </div>
+</div>
+<% stylesheets 'slideshow' -%>
+<% javascripts 'mootools', 'mootools-fx-scroll', 'slides' -%>

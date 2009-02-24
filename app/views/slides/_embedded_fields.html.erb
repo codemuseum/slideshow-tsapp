@@ -1,0 +1,34 @@
+<%# Takes f, and optionally a slide to preselect %>
+<% slide = Slide.new if local_assigns[:slide].nil? %>
+
+<% fields_for "#{f.object_name}[assigned_slides][]", slide do |sf| -%>
+  <div class="slide title-placement-<%=h slide.title_placement %>" id="<%= slide.new_record? ? "new_slide__INDEX_" : "slide_#{slide.id}" %>">
+    <%= sf.hidden_field :position, :class => 'position-value', :index => nil %>
+    <div class="preview">
+      <%= asset_preview_fields(sf, [:pictures], true) %>
+    </div>
+    <div class="title-box">
+      <div class="title-box-inner">
+        <div class="title">
+          <%= sf.text_field :title, :index => nil %>
+        </div>
+        <div class="subtitle">
+          <%= sf.text_area :subtitle, :rows => 3, :index => nil %>
+        </div>
+      </div>
+    </div>
+    <div class="settings ts-settings-box-ui">
+      <span class="title-placement">
+        <%= sf.label :title_placement, 'Layout:' %> <%= sf.select :title_placement, Slide::TITLE_PLACEMENTS, {}, :index => nil %>
+      </span>
+      &bull;
+      <span class="link">
+        <%= sf.label :link, 'Link When Clicked:' %> 
+        <%= asset_url_text_field(sf, [:pages, :documents], true) %>
+        <%= asset_change_link(sf, [:pages, :documents], "...") %>
+      </span>
+      &bull; <span class="change-asset"><%= asset_change_link(sf, [:pictures]) %></span>
+      &bull; <a class="remove">Delete Slide</a>
+    </div>
+  </div>
+<% end -%>

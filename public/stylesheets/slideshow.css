@@ -1,0 +1,43 @@
+body.displaying-page.action-edit .app-slideshow div.box.empty-slideshow {border:1px dotted gray;}
+.app-slideshow a { cursor:pointer;  }
+
+.app-slideshow .screen {width:100%; overflow:hidden;}
+.app-slideshow .stage {height:100%;}
+.app-slideshow .stage .slides { width:10000%; height:100%; }
+.app-slideshow .slides .slide { float:left; position:relative; width:1%; height:100%; }
+.app-slideshow .stage .slide .preview { height: 100%; width: 100%;}
+.app-slideshow .stage .slide .preview a img { border:0; }
+
+.app-slideshow .slides .slide .title-box { position:absolute;}
+
+.app-slideshow .slides .slide.title-placement-top .title-box { top:5px; width:100%; text-align:center;}
+.app-slideshow .slides .slide.title-placement-bottom .title-box { bottom:5px; width:100%; text-align:center;}
+.app-slideshow .slides .slide.title-placement-left .title-box { position:absolute; width:50%; height:99%; left:0px; top:1%; text-align:left; display: table;}
+.app-slideshow .slides .slide.title-placement-right .title-box { position:absolute; width:50%; height:99%; top:1%; right:0px;  text-align:left; display: table;}
+
+.app-slideshow .slides .slide.title-placement-left .title-box .title-box-inner, 
+.app-slideshow .slides .slide.title-placement-right .title-box .title-box-inner { display: table-cell; vertical-align: middle; }
+
+
+.app-slideshow .slides .slide.title-placement-top .preview { text-align:center;}
+.app-slideshow .slides .slide.title-placement-bottom .preview { text-align:center;}
+.app-slideshow .slides .slide.title-placement-left .preview { text-align:right;}
+.app-slideshow .slides .slide.title-placement-right .preview { text-align:left; }
+
+
+.app-slideshow .slides .slide a { text-decoration:none; }
+
+.app-slideshow .slides .slide .title { font-size:2em; }
+.app-slideshow .slides .slide .subtitle { font-size:1.4em; color:#888; }
+
+.app-slideshow .slides .slide .title a {color:#000;}
+.app-slideshow .slides .slide .subtitle a {color:#888;}
+
+.app-slideshow .slides .slide .title a:hover {text-decoration:underline;}
+
+.app-slideshow .slide-controls {text-align: center;}
+.app-slideshow .slide-controls a {font-size: 1px; line-height:1px; color:transparent; padding: 5px 7px; background: transparent url(/slideshow/images/slide-control.png) no-repeat scroll 0px 0px;}
+.app-slideshow .slide-controls a.showing { background-position: 0px -30px;}
+
+/* please please override me in your design! */
+.app-slideshow .screen { height: 400px; }
