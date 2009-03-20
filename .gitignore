@@ -16,3 +16,5 @@ config/mail_servers.yml
 index/**/*
 config/tsapp.yml
 config/backup_fu.yml
+public/slideshow/**/*
+public/slideshow

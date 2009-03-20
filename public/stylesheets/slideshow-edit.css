@@ -10,4 +10,4 @@
 .app-slideshow .slides .slide.title-placement-right .title textarea,
 .app-slideshow .slides .slide.title-placement-left .title textarea { height:4em; width: 100%; }
 
-.app-slideshow .slide-controls a.add-slide {background-image:url(/slideshow/images/add-slide-control.png); padding:6px 7px;}
+.app-slideshow .slide-controls a.add-slide {background-image:url(../images/add-slide-control.png); padding:6px 7px;}

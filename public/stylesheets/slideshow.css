@@ -36,7 +36,7 @@ body.displaying-page.action-edit .app-slideshow div.box.empty-slideshow {border:
 .app-slideshow .slides .slide .title a:hover {text-decoration:underline;}
 
 .app-slideshow .slide-controls {text-align: center;}
-.app-slideshow .slide-controls a {font-size: 1px; line-height:1px; color:transparent; padding: 5px 7px; background: transparent url(/slideshow/images/slide-control.png) no-repeat scroll 0px 0px;}
+.app-slideshow .slide-controls a {font-size: 1px; line-height:1px; color:transparent; padding: 5px 7px; background: transparent url(../images/slide-control.png) no-repeat scroll 0px 0px;}
 .app-slideshow .slide-controls a.showing { background-position: 0px -30px;}
 
 /* please please override me in your design! */

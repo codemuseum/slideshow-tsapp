@@ -2,7 +2,7 @@
 <% slide = Slide.new if local_assigns[:slide].nil? %>
 
 <% fields_for "#{f.object_name}[assigned_slides][]", slide do |sf| -%>
-  <div class="slide title-placement-<%=h slide.title_placement %>" id="<%= slide.new_record? ? "new_slide__INDEX_" : "slide_#{slide.id}" %>">
+  <div class="slide title-placement-<%=h slide.title_placement %>" id="<%= slide.new_record? && local_assigns[:slide].nil? ? "new_slide__INDEX_" : (slide.new_record? ? "new_slide_0" : "slide_#{slide.id}") %>">
     <%= sf.hidden_field :position, :class => 'position-value', :index => nil %>
     <div class="preview">
       <%= asset_preview_fields(sf, [:pictures], true) %>

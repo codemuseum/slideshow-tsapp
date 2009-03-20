@@ -1,6 +1,6 @@
 // Parses the slides form correctly for a slideshow editor.  
 // Also requires PictureSelect to be included; and register each slide with picture select
-
+// Requires jquery 1.3.2 and Jquery UI
 var SlideshowEdit = {
   init: function() {
     TSEditor.registerOnEdit('slideshow', SlideshowEdit.slideshowInstance);
@@ -15,84 +15,88 @@ var SlideshowEdit = {
         } catch(ignored) {}
         
         var slideshowBox = $(slideshowBox);
-        this.controlToSlideMap = new Hash();
-        this.slidesEl = slideshowBox.getElementsBySelector('div.slides')[0];
-        this.slideControlsEl = slideshowBox.getElementsBySelector('div.slide-controls')[0];
-        this.screenEl = slideshowBox.getElementsBySelector('div.screen')[0];
-        var creationCode = this._extractCreationCode(slideshowBox.getElementsBySelector('div.new-slide-code')[0]);
-        var controlCreationCode = this._extractCreationCode(slideshowBox.getElementsBySelector('div.new-slide-control-code')[0]);
-        this.newSlideControl = slideshowBox.getElementsBySelector('.add-slide')[0];
+        this.controlToSlideMap = {};
+        this.slidesEl = slideshowBox.find('div.slides:first');
+        this.slideControlsEl = slideshowBox.find('div.slide-controls:first');
+        this.screenEl = slideshowBox.find('div.screen:first');
+        var creationCode = this._extractCreationCode(slideshowBox.find('div.new-slide-code'));
+        var controlCreationCode = this._extractCreationCode(slideshowBox.find('div.new-slide-control-code'));
+        this.newSlideControl = slideshowBox.find('.add-slide');
       
-        var thisRef = this;
-        this.slideEls = this.slidesEl.getElementsBySelector('div.slide');
-        var controlEls = this.slideControlsEl.getElementsBySelector('a');
+        var self = this;
+        this.slideEls = this.slidesEl.find('div.slide');
+        var controlEls = this.slideControlsEl.find('a.control');
         this.slideCount = this.slideEls.size();
-        this.slideEls.each(function(slide, index) { thisRef._observeSlide(slide, controlEls[index]); });
-        this.newSlideControl.observe('click', 
-          function(ev) { Event.stop(ev); thisRef._addSlide(creationCode, controlCreationCode); thisRef._makeSortable(); });
+        this.slideEls.each(function(i) { self._observeSlide($(this), $(controlEls.get(i))); });
+        this.newSlideControl.click(function(ev) { self._addSlide(creationCode, controlCreationCode); self._makeSortable(); });
         this._makeSortable();
-        slideshowBox.ancestors().detect(function(anc) { return anc.tagName == 'FORM' }).observe('submit', function(ev) { thisRef._saveOrder(); });
+        slideshowBox.parents('form').bind('submit', function(ev) { self._saveOrder(); });
         
         // Go to marked slide to show
-        controlEls.each(function(control) { if (control.hasClassName('showing')) { thisRef._showSlide(thisRef.controlToSlideMap.get(control.id), control)}});
+        controlEls.each(function(i) { if ($(this).hasClass('showing')) { self._showSlide(self.controlToSlideMap[this.id], $(this)); }});
       },
       // Returns creation code from element and removes element from DOM tree
       _extractCreationCode: function(el) {
-        var creationCode = el.innerHTML;
+        var creationCode = el.get(0).innerHTML;
         el.remove();
         return creationCode;
       },
       _addSlide: function(html, controlHtml) {
         var newEl=$(document.createElement('div'));
-        newEl.update(html.replace(/_INDEX_/, this.slideCount));
-        newEl = newEl.firstDescendant().remove();
-        this.slidesEl.appendChild(newEl);
+        newEl.html(html.replace(/_INDEX_/, this.slideCount));
+        newEl = newEl.find('*:first').remove().get(0);
+        this.slidesEl.get(0).appendChild(newEl);
         var controlEl = $(document.createElement('div'));
-        controlEl.update(controlHtml.replace(/_INDEX_/, this.slideCount));
-        controlEl = controlEl.firstDescendant().remove();
-        this.slideControlsEl.insertBefore(controlEl, this.newSlideControl);
+        controlEl.html(controlHtml.replace(/_INDEX_/, this.slideCount));
+        controlEl = controlEl.find('*:first').remove().get(0);
+        this.slideControlsEl.get(0).insertBefore(controlEl, this.newSlideControl.get(0));
         
-        this._observeSlide(newEl, controlEl);
+        this._observeSlide($(newEl), $(controlEl));
         this.slideCount++;
-        this._showSlide(newEl, controlEl);
-        newEl.getElementsBySelector('textarea')[0].focus();
+        this._showSlide($(newEl), $(controlEl));
+        $(newEl).find('textarea:first').focus();
         
         TS.Assets.Selector.selectAsset(newEl, ['pictures']);
       },
       _showSlide: function(slide, control) {
-        this.screenEl.scrollLeft = slide.offsetLeft - this.screenEl.offsetLeft;
-        if (this.activeSlideControl) this.activeSlideControl.removeClassName('showing');
+        this.screenEl.scrollTo(slide, 0);
+        if (this.activeSlideControl) this.activeSlideControl.removeClass('showing');
         this.activeSlideControl = control;
-        this.activeSlideControl.addClassName('showing');
+        this.activeSlideControl.addClass('showing');
       },
       _observeSlide: function(slide, control) {
-        var thisRef = this;
-        this.controlToSlideMap.set(control.id, slide);
-        control.observe('click', function() { thisRef._showSlide(slide, control); });
-        var remove = slide.getElementsBySelector('.remove')[0];
-        remove.observe('click', function() { slide.remove(); control.remove(); thisRef.slideCount--; thisRef.controlToSlideMap.unset(control.id); });
-        var changeAsset = slide.getElementsBySelector('.change-asset a')[0];
-        changeAsset.observe('click', function() { TS.Assets.Selector.selectAsset(slide, ['pictures']);})
+        var self = this;
+        this.controlToSlideMap[control.get(0).id] = slide;
+        control.click(function(ev) { self._showSlide(slide, control); });
+        var remove = slide.find('.remove');
+        remove.click(function(ev) { 
+          slide.remove(); 
+          control.remove(); 
+          self.slideCount--; 
+          self.controlToSlideMap[control.get(0).id] = null; 
+          self._showSlide(self.slidesEl.find('div.slide:first'), self.slideControlsEl.find('a.control:first'));
+        });
+        var changeAsset = slide.find('.change-asset a');
+        changeAsset.click(function(ev) { TS.Assets.Selector.selectAsset(slide, ['pictures']);})
         
-        var titleSelect = slide.getElementsBySelector('.title-placement select')[0];
-        titleSelect.observe('change', function() { thisRef._changeTitlePlacementClassName(slide, titleSelect);});
+        var titleSelect = slide.find('.title-placement select');
+        titleSelect.bind('change', function(ev) { self._changeTitlePlacementClass(slide, titleSelect);});
         
-        TS.Assets.Selector.register(slide.getElementsBySelector('.preview')[0]);
-        TS.Assets.Selector.register(slide.getElementsBySelector('.link')[0]);
+        TS.Assets.Selector.register(slide.find('.preview'));
+        TS.Assets.Selector.register(slide.find('.link'));
       },
-      _changeTitlePlacementClassName: function(slide, titleSelect) {
-        slide.classNames().each(function(className) { if (className.startsWith('title-placement-')) slide.removeClassName(className); });
-        slide.addClassName('title-placement-'+titleSelect.options[titleSelect.selectedIndex].value);
+      _changeTitlePlacementClass: function(slide, titleSelect) {
+        try { slide.removeClass(slide.get(0).className.match(new RegExp('(\\s|^)(title-placement-[^\\s]*)(\\s|$)'))[2]); } catch(ignore) {}
+        slide.addClass('title-placement-'+titleSelect.get(0).options[titleSelect.get(0).selectedIndex].value);
       },
       _makeSortable: function() {  
-        Sortable.create(this.slideControlsEl, { only:'control', tag:'a', constraint:'horizontal' });
+        this.slideControlsEl.sortable({ items:'a.control', axis:'x' });
+        this.slideControlsEl.disableSelection();
       },
       _saveOrder: function() {
-        var currentPosition = 0;
-        var thisRef = this;
-        this.slideControlsEl.getElementsBySelector('a.control').each(function(control) {
-          thisRef.controlToSlideMap.get(control.id).getElementsBySelector('input.position-value')[0].value = currentPosition;
-          currentPosition++;
+        var self = this;
+        this.slideControlsEl.find('a.control').each(function(i) {
+          self.controlToSlideMap[this.id].find('input.position-value').get(0).value = i;
         });
       }
     };
