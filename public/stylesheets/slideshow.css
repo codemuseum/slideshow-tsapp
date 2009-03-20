@@ -1,4 +1,4 @@
-body.displaying-page.action-edit .app-slideshow div.box.empty-slideshow {border:1px dotted gray;}
+body.displaying-page.action-edit .app-slideshow div.box.empty-slideshow {border:1px dotted gray;background:transparent url(../images/empty-slideshow.png) center center no-repeat;}
 .app-slideshow a { cursor:pointer;  }
 
 .app-slideshow .screen {width:100%; overflow:hidden;}
