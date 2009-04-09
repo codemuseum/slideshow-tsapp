@@ -1,7 +1,7 @@
 body.displaying-page.action-edit .app-slideshow div.box.empty-slideshow {border:1px dotted gray;background:transparent url(../images/empty-slideshow.png) center center no-repeat;}
 .app-slideshow a { cursor:pointer;  }
 
-.app-slideshow .screen {width:100%; overflow:hidden;}
+.app-slideshow .screen {width:100%; overflow:hidden; position:relative;}
 .app-slideshow .stage {height:100%;}
 .app-slideshow .stage .slides { width:10000%; height:100%; }
 .app-slideshow .slides .slide { float:left; position:relative; width:1%; height:100%; }
